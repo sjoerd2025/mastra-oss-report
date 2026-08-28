@@ -2555,9 +2555,10 @@ export const ossReportWorkflow = createWorkflow({
   inputSchema: workflowInputSchema,
   outputSchema: reportSchema,
   stateSchema: reportStateSchema,
-  // Weekly report: fires Friday 3pm UTC covering Monday 00:00 UTC through fire time.
+  // Weekly report: fires Friday 3pm ET covering Monday 00:00 UTC through fire time.
   schedule: {
-    cron: '0 15 * * 5',
+    // 3pm ET is 19:00 UTC during standard time and 19:00 UTC during daylight time (EDT/EST offset always 4 or 5 hours, but for cron which doesn't do DST we'll treat ET as 19:00 UTC)
+    cron: '0 19 * * 5',
     timezone: 'UTC',
     inputData: { window: 'week-to-date' },
   },
