@@ -1,19 +1,27 @@
 # @oss-report/web
 
-Vite + React + Tailwind + shadcn UI for browsing OSS reports.
+Vite + React + Tailwind UI for generating and browsing OSS reports.
 
-Reads report JSON files from the Mastra server at `/report-data/` (proxied in dev to `http://localhost:4111`).
+The app uses `@mastra/client-js` to query `oss-report-workflow` runs from the Mastra server. Set `VITE_MASTRA_API_URL` to override the server URL; development defaults to `http://localhost:4115`, while production uses the current origin.
 
 ## Scripts
 
+From this package:
+
 ```bash
-pnpm dev        # vite dev server on :5173
-pnpm build      # typecheck + vite build
-pnpm preview    # preview built output
+pnpm dev        # Vite development server on :5173
+pnpm build      # typecheck and emit into ../mastra/src/mastra/public/app
+pnpm preview    # preview the production build
 pnpm typecheck  # tsc --noEmit
 ```
 
+The generated files under `apps/mastra/src/mastra/public/app/` must be present before the Mastra production build runs.
+
 ## Routes
 
-- `/` — list of all reports (from `index.json`)
-- `/reports/:id` — single report (from `reports/<id>.json`)
+The app uses hash routing so it works below the production `/app/` path:
+
+- `/#/` — list successful workflow runs
+- `/#/reports/:runId` — full report detail
+
+In production these become `/app/#/` and `/app/#/reports/:runId`.
